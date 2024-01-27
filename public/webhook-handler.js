@@ -10,6 +10,7 @@ app.use(cors()); // Enable CORS for all routes
 app.use(bodyParser.json());
 
 app.post('/webhook-endpoint', (req, res) => {
+  console.log('Received webhook request:', req.method);
   const webhookData = req.body;
   // Process the webhook data as needed
   handleWebhook(webhookData);
