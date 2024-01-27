@@ -1,11 +1,29 @@
-// Assume this function is triggered when the webhook is received
+// Assume this function is triggered when the widget is loaded
+async function fetchWebhookData() {
+  try {
+    const response = await fetch('https://www.test-site.com/webhook-endpoint', {
+      method: 'GET',
+    });
+
+    if (response.ok) {
+      const webhookResponse = await response.json();
+      handleWebhookResponse(webhookResponse);
+    } else {
+      console.error('Failed to fetch webhook data:', response.status, response.statusText);
+    }
+  } catch (error) {
+    console.error('Error fetching webhook data:', error);
+  }
+}
+
+// Assume this function is triggered when the webhook response is received
 async function handleWebhookResponse(webhookResponse) {
   try {
     const eventData = JSON.parse(webhookResponse);
 
     if (
       eventData.meta.eventType === "ENTITY_CREATED" &&
-      eventData.meta.entityType === "wp_post"
+      eventData.primaryProfile.meta.entityType === "wp_post"
     ) {
       // Extract relevant data from the webhook response
       const entityIds = eventData.primaryProfile.c_socialPostingEntityID;
@@ -60,6 +78,5 @@ async function makeApiCall(entityIds, text, photoUrls) {
   }
 }
 
-// Example usage
-const webhookResponse = '{"meta": {"eventType": "ENTITY_CREATED", "entityType": "wp_post"}}';
-handleWebhookResponse(webhookResponse);
+// Fetch data from the webhook handler when the widget is loaded
+fetchWebhookData();
