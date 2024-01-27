@@ -1,8 +1,8 @@
 // Assume this function is triggered when the widget is loaded
 async function fetchWebhookData() {
   try {
-    const response = await fetch('https://www.test-site.com/webhook-endpoint', {
-      method: 'GET',
+    const response = await fetch('https://lordly-planned-aardwolf.pgsdemo.com/webhook-endpoint', {
+      method: 'POST',
     });
 
     if (response.ok) {
