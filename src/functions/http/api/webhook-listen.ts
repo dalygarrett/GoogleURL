@@ -12,7 +12,7 @@ const handleWebhook = async (request: SitesHttpRequest): Promise<SitesHttpRespon
 
   if (
     webhookPayload.meta.eventType === "ENTITY_CREATED" &&
-    webhookPayload.meta.entityType === "wp_post"
+    webhookPayload.primaryProfile.meta.entityType === "wp_post"
   ) {
     // Extract necessary information from the webhook payload
     const entityIds = [webhookPayload.primaryProfile.c_socialPostingEntityID];
