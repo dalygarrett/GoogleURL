@@ -22,7 +22,7 @@ const handleWebhook = async (request: SitesHttpRequest): Promise<SitesHttpRespon
     );
 
     // Make API call to Yext
-    const apiKey = process.env.API_KEY; // Replace with your environment variable
+    const apiKey = [API_KEY]; // Replace with your environment variable
     const apiUrl = `https://api.yextapis.com/v2/accounts/me/posts?api_key=${apiKey}&v=20240127`;
 
     try {
