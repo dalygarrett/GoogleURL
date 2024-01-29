@@ -1,5 +1,4 @@
 import { SitesHttpRequest, SitesHttpResponse } from "@yext/pages/*";
-import axios from "axios";
 
 const webhookListen = async (
   request: SitesHttpRequest
