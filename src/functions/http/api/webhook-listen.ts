@@ -1,5 +1,4 @@
 import { SitesHttpResponse, SitesHttpRequest } from "@yext/pages/*";
-import axios from "axios";
 
 const handleWebhook = async (request: SitesHttpRequest): Promise<SitesHttpResponse> => {
   const { body, method } = request;
@@ -23,31 +22,32 @@ const handleWebhook = async (request: SitesHttpRequest): Promise<SitesHttpRespon
 
     console.log("Extracted Data:", entityIds, text, photoUrls);
 
-    // Make API call to Yext
+    // Make API call to Yext using fetch
     const apiKey = "a5daebf51345716fdef2d975662e868c"; // Replace with your API key
     const apiUrl = `https://api.yextapis.com/v2/accounts/me/posts?api_key=${apiKey}&v=20240127`;
 
     try {
-      const response = await axios.post(apiUrl, {
-        entityIds,
-        publisher: "FIRSTPARTY",
-        text,
-        photoUrls,
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          entityIds,
+          publisher: "FIRSTPARTY",
+          text,
+          photoUrls,
+        }),
       });
 
-      console.log("Yext API Response:", response.data);
+      const responseData = await response.json();
+
+      console.log("Yext API Response:", responseData);
 
       return { body: "Success", headers: {}, statusCode: 200 };
     } catch (error) {
       console.error("Error making Yext API call:", error);
-    
-      // Log additional details if available
-      if (error.response) {
-        console.error("Response Data:", error.response.data);
-        console.error("Response Status:", error.response.status);
-        console.error("Response Headers:", error.response.headers);
-      }
-    
+
       return { body: "Error making Yext API call", headers: {}, statusCode: 500 };
     }
   }
