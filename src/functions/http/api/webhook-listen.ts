@@ -40,12 +40,14 @@ const handleWebhook = async (request: SitesHttpRequest): Promise<SitesHttpRespon
       return { body: "Success", headers: {}, statusCode: 200 };
     } catch (error) {
       console.error("Error making Yext API call:", error);
-
+    
       // Log additional details if available
       if (error.response) {
         console.error("Response Data:", error.response.data);
+        console.error("Response Status:", error.response.status);
+        console.error("Response Headers:", error.response.headers);
       }
-
+    
       return { body: "Error making Yext API call", headers: {}, statusCode: 500 };
     }
   }
