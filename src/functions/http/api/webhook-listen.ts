@@ -20,7 +20,7 @@ const handleWebhook = async (request: SitesHttpRequest): Promise<SitesHttpRespon
     const photoUrls = webhookPayload.primaryProfile.photoGallery.map(
       (gallery) => gallery.image.sourceUrl
     );
-    
+
     console.log("Extracted Data:", entityIds, text, photoUrls);
 
     // Make API call to Yext
