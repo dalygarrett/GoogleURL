@@ -41,6 +41,7 @@ const handleWebhook = async (request: SitesHttpRequest): Promise<SitesHttpRespon
     
       return { body: "Error making Yext API call", headers: {}, statusCode: 500 };
     }
+  }
 
   return { body: "Not a relevant event", headers: {}, statusCode: 200 };
 };
