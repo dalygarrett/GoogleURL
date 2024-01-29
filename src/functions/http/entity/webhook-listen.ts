@@ -1,8 +1,7 @@
-import { SitesHttpRequest, SitesHttpResponse } from "@yext/pages/*";
+import { SitesHttpResponse, SitesHttpRequest } from "@yext/pages/*";
+import axios from "axios";
 
-const webhookListen = async (
-  request: SitesHttpRequest
-): Promise<SitesHttpResponse> => {
+const handleWebhook = async (request: SitesHttpRequest): Promise<SitesHttpResponse> => {
   const { body, method } = request;
 
   if (method !== "POST") {
@@ -11,38 +10,40 @@ const webhookListen = async (
 
   const webhookPayload = JSON.parse(body);
 
-  const { meta, primaryProfile, eventType } = webhookPayload;
-
-  if (eventType === "ENTITY_CREATED" && primaryProfile.meta.entityType === "wp_post") {
-    // Extract necessary data from webhook payload
-    const entityIds = [primaryProfile.c_socialPostingEntityID];
-    const text = primaryProfile.wp_postExcerpt.markdown;
-    const photoUrls = primaryProfile.photoGallery.map((photo) => photo.image.sourceUrl);
+  if (
+    webhookPayload.meta.eventType === "ENTITY_CREATED" &&
+    webhookPayload.meta.entityType === "wp_post"
+  ) {
+    // Extract necessary information from the webhook payload
+    const entityIds = [webhookPayload.primaryProfile.c_socialPostingEntityID];
+    const text = webhookPayload.primaryProfile.wp_postExcerpt.markdown;
+    const photoUrls = webhookPayload.primaryProfile.photoGallery.map(
+      (gallery) => gallery.image.sourceUrl
+    );
 
     // Make API call to Yext
-    const apiKey = process.env.YEXT_API_KEY; // Ensure that you have set this environment variable
+    const apiKey = process.env.API_KEY; // Replace with your environment variable
     const apiUrl = `https://api.yextapis.com/v2/accounts/me/posts?api_key=${apiKey}&v=20240127`;
 
     try {
-      const apiResponse = await axios.post(apiUrl, {
+      const response = await axios.post(apiUrl, {
         entityIds,
         publisher: "FIRSTPARTY",
         text,
         photoUrls,
       });
 
-      console.log("API Response:", apiResponse.data);
+      console.log("Yext API Response:", response.data);
 
       return { body: "Success", headers: {}, statusCode: 200 };
     } catch (error) {
-      console.error("API Error:", error.message);
+      console.error("Error making Yext API call:", error.response?.data || error.message);
 
-      return { body: "Internal Server Error", headers: {}, statusCode: 500 };
+      return { body: "Error making Yext API call", headers: {}, statusCode: 500 };
     }
   }
 
-  return { body: "Not applicable", headers: {}, statusCode: 200 };
+  return { body: "Not a relevant event", headers: {}, statusCode: 200 };
 };
 
-export default webhookListen;
-
+export default handleWebhook;
