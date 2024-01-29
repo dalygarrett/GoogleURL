@@ -22,7 +22,8 @@ const handleWebhook = async (request: SitesHttpRequest): Promise<SitesHttpRespon
     );
 
     // Make API call to Yext
-    const apiUrl = `https://api.yextapis.com/v2/accounts/me/posts?api_key=a5daebf51345716fdef2d975662e868c&v=20240127`;
+    const apiKey = "a5daebf51345716fdef2d975662e868c"; // Replace with your API key
+    const apiUrl = `https://api.yextapis.com/v2/accounts/me/posts?api_key=${apiKey}&v=20240127`;
 
     try {
       const response = await axios.post(apiUrl, {
@@ -37,6 +38,11 @@ const handleWebhook = async (request: SitesHttpRequest): Promise<SitesHttpRespon
       return { body: "Success", headers: {}, statusCode: 200 };
     } catch (error) {
       console.error("Error making Yext API call:", error);
+
+      // Log additional details if available
+      if (error.response) {
+        console.error("Response Data:", error.response.data);
+      }
 
       return { body: "Error making Yext API call", headers: {}, statusCode: 500 };
     }
