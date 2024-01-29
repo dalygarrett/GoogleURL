@@ -31,13 +31,13 @@ const handleWebhook = async (request: SitesHttpRequest): Promise<SitesHttpRespon
         text,
         photoUrls,
       });
-    
+
       console.log("Yext API Response:", response.data);
-    
+
       return { body: "Success", headers: {}, statusCode: 200 };
     } catch (error) {
-      console.error("Error making Yext API call:", error.response?.data || error.message);
-    
+      console.error("Error making Yext API call:", error);
+
       return { body: "Error making Yext API call", headers: {}, statusCode: 500 };
     }
   }
