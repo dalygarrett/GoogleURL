@@ -22,7 +22,7 @@ const handleWebhook = async (request: SitesHttpRequest): Promise<SitesHttpRespon
     );
 
     // Make API call to Yext
-    const apiUrl = `https://api.yextapis.com/v2/accounts/me/posts?api_key=${API_KEY}&v=20240127`;
+    const apiUrl = `https://api.yextapis.com/v2/accounts/me/posts?api_key=a5daebf51345716fdef2d975662e868c&v=20240127`;
 
     try {
       const response = await axios.post(apiUrl, {
