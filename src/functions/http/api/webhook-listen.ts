@@ -1,5 +1,10 @@
 import { SitesHttpResponse, SitesHttpRequest } from "@yext/pages/*";
 
+// Function to strip HTML tags from a string
+const stripHtmlTags = (html: string): string => {
+  return html.replace(/(<([^>]+)>)/gi, "");
+};
+
 const handleWebhook = async (request: SitesHttpRequest): Promise<SitesHttpResponse> => {
   const { body, method } = request;
 
@@ -15,7 +20,7 @@ const handleWebhook = async (request: SitesHttpRequest): Promise<SitesHttpRespon
   ) {
     // Extract necessary information from the webhook payload
     const entityIds = [webhookPayload.primaryProfile.c_socialPostingEntityID];
-    const text = webhookPayload.primaryProfile.wp_postExcerpt.markdown;
+    const text = stripHtmlTags(webhookPayload.primaryProfile.wp_postExcerpt.markdown);
     const photoUrls = webhookPayload.primaryProfile.photoGallery.map(
       (gallery) => gallery.image.sourceUrl
     );
@@ -23,8 +28,7 @@ const handleWebhook = async (request: SitesHttpRequest): Promise<SitesHttpRespon
     console.log("Extracted Data:", entityIds, text, photoUrls);
 
     // Make API call to Yext using fetch
-    const apiKey = "a5daebf51345716fdef2d975662e868c"; // Replace with your API key
-    const apiUrl = `https://api.yextapis.com/v2/accounts/me/posts?api_key=${apiKey}&v=20240127`;
+    const apiUrl = `https://api.yextapis.com/v2/accounts/me/posts?api_key=${API_KEY}&v=20240127`;
 
     try {
       const response = await fetch(apiUrl, {
