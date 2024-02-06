@@ -16,7 +16,7 @@ const handleGoogleUrlWebhook = async (request: SitesHttpRequest): Promise<SitesH
     const entityId = webhookPayload.listing.locationId;
     const listingUrl = webhookPayload.listing.listingUrl;
 
-    const apiUrl = `https://api.yextapis.com/v2/accounts/me/entities/${entityId}?api_key={API_KEY}&v=20240206`;
+    const apiUrl = `https://api.yextapis.com/v2/accounts/me/entities/${entityId}?api_key=${API_KEY}&v=20240206`;
 
     try {
       const response = await fetch(apiUrl, {
