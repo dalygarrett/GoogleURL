@@ -13,7 +13,7 @@ const handleGoogleUrlWebhook = async (request: SitesHttpRequest): Promise<SitesH
       webhookPayload.listing.status === "LIVE" && 
       webhookPayload.listing.publisherId === "GOOGLEMYBUSINESS") {
     
-    const entityId = webhookPayload.listing.entityId;
+    const entityId = webhookPayload.listing.locationId;
     const listingUrl = webhookPayload.listing.listingUrl;
 
     const apiUrl = `https://api.yextapis.com/v2/accounts/me/entities/${entityId}?api_key={API_KEY}&v=20240206`;
